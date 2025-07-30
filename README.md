@@ -35,7 +35,7 @@ The TalentScout Hiring Assistant is an AI-powered chatbot that:
 1. Clone this repository:
    ```bash
    git clone <repository-url>
-   cd TalentScout-Hiring-Assistant
+   cd TalentScout
    ```
 
 2. Create a virtual environment:
