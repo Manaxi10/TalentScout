@@ -17,4 +17,4 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1
 
 # Run the application
-CMD ["streamlit", "run", "app.py", "--server.port=8000"]
+CMD ["streamlit", "run", "app.py", "--server.port=8000"]cls

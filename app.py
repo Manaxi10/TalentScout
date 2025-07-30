@@ -19,7 +19,7 @@ st.markdown("""
     .main .block-container {padding-top: 2rem; padding-bottom: 2rem;}
     .stChat {border-radius: 10px;}
     .user-message {
-        background-color: #d1e7dd; /* Changed to a greenish shade */
+        background-color: #d1e7dd;
         color: #155724;
         padding: 10px;
         border-radius: 10px;
@@ -27,12 +27,18 @@ st.markdown("""
         border: 1px solid #badbcc;
     }
     .assistant-message {
-        background-color: #cff4fc; /* Changed to a blueish shade */
+        background-color: #cff4fc;
         color: #055160;
         padding: 10px;
         border-radius: 10px;
         margin: 5px 0;
         border: 1px solid #b6effb;
+    }
+    .chat-container {
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 10px;
+        margin-bottom: 20px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -51,26 +57,15 @@ if "messages" not in st.session_state:
 st.title("👨‍💼 TalentScout Hiring Assistant")
 st.markdown("Welcome to TalentScout's AI-powered Hiring Assistant! I'm here to help with your initial screening process.")
 
-# Display chat history
-for message in st.session_state.messages:
-    role = message["role"]
-    content = message["content"]
-    
-    if role == "user":
-        st.markdown(f'<div class="user-message"><strong>You:</strong> {content}</div>', unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="assistant-message"><strong>Hiring Assistant:</strong> {content}</div>', unsafe_allow_html=True)
+# Create a container for chat messages
+chat_container = st.container()
 
-# Chat input
+# Process user input BEFORE displaying messages
 user_input = st.chat_input("Type your message here...")
 
-# Process user input
 if user_input:
     # Add user message to history
     st.session_state.messages.append({"role": "user", "content": user_input})
-    
-    # Display user message
-    st.markdown(f'<div class="user-message"><strong>You:</strong> {user_input}</div>', unsafe_allow_html=True)
     
     # Get chatbot response
     response = st.session_state.chatbot.get_response(user_input)
@@ -78,11 +73,44 @@ if user_input:
     # Add assistant message to history
     st.session_state.messages.append({"role": "assistant", "content": response})
     
-    # Display assistant message
-    st.markdown(f'<div class="assistant-message"><strong>Hiring Assistant:</strong> {response}</div>', unsafe_allow_html=True)
-    
     # Force a rerun to update the UI
     st.rerun()
+
+# Display chat history in the container
+with chat_container:
+    st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+    
+    # Display all messages
+    for i, message in enumerate(st.session_state.messages):
+        role = message["role"]
+        content = message["content"]
+        
+        if role == "user":
+            st.markdown(f'<div class="user-message"><strong>You:</strong> {content}</div>', unsafe_allow_html=True)
+        else:
+            st.markdown(f'<div class="assistant-message"><strong>Hiring Assistant:</strong> {content}</div>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+# Auto-scroll to bottom using JavaScript
+if st.session_state.messages:
+    st.markdown("""
+    <script>
+        var chatContainer = document.querySelector('.chat-container');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Alternative method using setTimeout to ensure DOM is ready
+        setTimeout(function() {
+            var containers = document.querySelectorAll('.stMarkdown');
+            var lastContainer = containers[containers.length - 1];
+            if (lastContainer) {
+                lastContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        }, 100);
+    </script>
+    """, unsafe_allow_html=True)
 
 # Display a sidebar with information about the app
 with st.sidebar:
@@ -117,7 +145,7 @@ with st.sidebar:
         # Show completion progress
         total_fields = len(fields_display)
         collected_fields = len([f for f in collected_info.values() if f])
-        progress = collected_fields / total_fields
+        progress = collected_fields / total_fields if total_fields > 0 else 0
         
         st.markdown("---")
         st.markdown("### Collection Progress")
@@ -154,3 +182,7 @@ with st.sidebar:
         assistant_msgs = len([m for m in st.session_state.messages if m["role"] == "assistant"])
         st.markdown(f"**User Messages:** {user_msgs}")
         st.markdown(f"**Assistant Messages:** {assistant_msgs}")
+
+# Display message count at bottom for debugging
+if st.session_state.messages:
+    st.caption(f"Displaying {len(st.session_state.messages)} messages")
