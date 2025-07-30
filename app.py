@@ -73,8 +73,6 @@ if user_input:
     # Add assistant message to history
     st.session_state.messages.append({"role": "assistant", "content": response})
     
-    # Force a rerun to update the UI
-    st.rerun()
 
 # Display chat history in the container
 with chat_container:

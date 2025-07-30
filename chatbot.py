@@ -189,6 +189,10 @@ class TalentScoutChatbot:
         User Information:
         {user_info}
 
+        Don't thank user for sharing information, just collect the information and ask next question.
+
+        Don't explain answers of the technical questions, just say correct or not.
+
         Check all of the 10 inforation is present in user information section ,if not ask the user for that information.
         
         Collect the information one by one, and after each response, ask the next question.
