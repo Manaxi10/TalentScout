@@ -147,9 +147,9 @@ The main conversation prompt:
 ## File Structure
 
 ```
-├── app.py                 # Main Streamlit application
-├── chatbot.py            # Core chatbot logic and MongoDB integration
-├── requirements.txt      # Python dependencies
+├── app.py               # Main Streamlit application
+├── chatbot.py           # Core chatbot logic and MongoDB integration
+├── requirements.txt     # Python dependencies
 ├── .env                 # Environment variables (not in repo)
 ├── README.md            # This documentation
 └── dockerfile           # Docker configuration (if needed)
