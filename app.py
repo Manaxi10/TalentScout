@@ -183,4 +183,5 @@ with st.sidebar:
 
 # Display message count at bottom for debugging
 if st.session_state.messages:
-    st.caption(f"\n\n\n")
+    st.caption(f"Total messages in session: ")
+    st.caption(len(st.session_state.messages))
