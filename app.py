@@ -39,6 +39,11 @@ st.markdown("""
         overflow-y: auto;
         padding: 10px;
         margin-bottom: 20px;
+        scroll-behavior: smooth;
+    }
+    /* Ensure the page scrolls to show new content */
+    html {
+        scroll-behavior: smooth;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -90,23 +95,18 @@ with chat_container:
     
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Auto-scroll to bottom using JavaScript
+# Force scroll to bottom by adding an empty element at the end
 if st.session_state.messages:
+    st.empty()  # This helps ensure the last message is visible
+    
+    # Alternative: Use a more reliable auto-scroll approach
     st.markdown("""
     <script>
-        var chatContainer = document.querySelector('.chat-container');
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-        
-        // Alternative method using setTimeout to ensure DOM is ready
-        setTimeout(function() {
-            var containers = document.querySelectorAll('.stMarkdown');
-            var lastContainer = containers[containers.length - 1];
-            if (lastContainer) {
-                lastContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        }, 100);
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 500);
+        });
     </script>
     """, unsafe_allow_html=True)
 
