@@ -108,27 +108,6 @@ The application follows a modular architecture:
    - `userinfo` collection: Stores extracted candidate information
    - `messages` collection: Stores complete chat history
 
-### Database Schema
-
-#### Messages Collection
-```json
-{
-  "_id": "ObjectId",
-  "role": "user|assistant", 
-  "content": "message content"
-}
-```
-
-#### User Info Collection
-```json
-{
-  "_id": "ObjectId",
-  "fieldname": "field_name",
-  "field_name": "field_value",
-  // Additional fields as extracted
-}
-```
-
 ### Conversation Flow
 
 The conversation follows a structured flow:
@@ -154,27 +133,6 @@ The main conversation prompt:
 - Tracks conversation progress
 - Generates relevant technical questions based on tech stack
 
-## Key Functions
-
-### [`TalentScoutChatbot.__init__()`](chatbot.py)
-Initializes the chatbot with Groq LLM and MongoDB connections.
-
-### [`TalentScoutChatbot.get_response(user_input)`](chatbot.py)
-Main function that processes user input and generates responses:
-- Extracts information from user messages
-- Stores data in MongoDB
-- Generates contextual responses
-- Manages conversation flow
-
-### [`TalentScoutChatbot.load_chat_history()`](chatbot.py)
-Loads previous chat history from MongoDB when the application starts.
-
-### [`TalentScoutChatbot.clear_chat_history()`](chatbot.py)
-Clears all chat history and user information from the database.
-
-### [`TalentScoutChatbot.get_collected_user_info()`](chatbot.py)
-Retrieves all collected user information for display in the sidebar.
-
 ## Configuration
 
 ### Environment Variables
@@ -186,23 +144,6 @@ Retrieves all collected user information for display in the sidebar.
 - **Temperature**: 0.7 (balanced creativity and consistency)
 - **Provider**: Groq (for fast inference)
 
-## Challenges & Solutions
-
-### Challenge 1: Information Extraction from Natural Language
-**Solution**: Implemented dual-prompt system - one for extraction, one for conversation flow.
-
-### Challenge 2: Maintaining Conversation Context
-**Solution**: Stores last 20 messages and passes them as context to the LLM.
-
-### Challenge 3: Data Persistence
-**Solution**: Integrated MongoDB for storing both chat history and extracted user information.
-
-### Challenge 4: Handling Various Tech Stacks
-**Solution**: Dynamic question generation based on candidate's declared technologies.
-
-### Challenge 5: User Experience
-**Solution**: Real-time progress tracking and professional UI design.
-
 ## File Structure
 
 ```
@@ -210,37 +151,6 @@ Retrieves all collected user information for display in the sidebar.
 ├── chatbot.py            # Core chatbot logic and MongoDB integration
 ├── requirements.txt      # Python dependencies
 ├── .env                 # Environment variables (not in repo)
-├── .gitignore           # Git ignore rules
 ├── README.md            # This documentation
 └── dockerfile           # Docker configuration (if needed)
 ```
-
-## Development
-
-### Running in Development Mode
-```bash
-streamlit run app.py --server.runOnSave true
-```
-
-### Testing
-The application includes error handling for:
-- MongoDB connection issues
-- LLM API failures
-- JSON parsing errors
-- Missing environment variables
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-For issues or questions, please contact the development team or create an issue in the repository.
